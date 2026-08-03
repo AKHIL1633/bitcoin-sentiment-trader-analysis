@@ -1,9 +1,70 @@
 # Trader Performance vs. Market Sentiment — Analysis
 
 Explores the relationship between Hyperliquid trader performance and the Bitcoin
-Fear & Greed Index.
+Fear & Greed Index: regime-level performance metrics, robustness checks (era-split,
+lagged correlation, bootstrap CIs), a crowd-bias correctness backtest, and a
+predictive model with feature importance.
 
 **Start here → [REPORT.md](REPORT.md)** for the full write-up: methodology, charts, and strategy recommendations.
+
+## Headline result
+
+| Sentiment | Win Rate | Profit Factor | PnL per $ traded |
+|---|---:|---:|---:|
+| Extreme Fear | 78.4% | 2.8x | 92 bps |
+| Fear | 86.7% | 5.5x | 59 bps |
+| Neutral | 80.1% | 4.9x | 68 bps |
+| Greed | 78.5% | 3.2x | 91 bps |
+| **Extreme Greed** | **88.9%** | **10.3x** | **206 bps** |
+
+Extreme Greed is this cohort's best-performing regime by every efficiency metric — the opposite of the "buy fear, sell greed" folk wisdom. Full detail, caveats, and a backtest of what that implies for position sizing are in [REPORT.md](REPORT.md).
+
+## Pipeline
+
+```mermaid
+flowchart TD
+    A1[("fear_greed_index.csv")]
+    A2[("historical_data.csv")]
+
+    A1 --> EXP["01-02: explore raw files"]
+    A2 --> EXP
+
+    A1 --> CLEAN["03: clean_merge.py\nfix timestamp bug, join on date"]
+    A2 --> CLEAN
+    CLEAN --> PARQ[("outputs/data/merged_trades.parquet")]
+
+    PARQ --> METRICS["04: metrics.py\nregime performance, correlations"]
+    METRICS --> DATA[("outputs/data/*.csv")]
+
+    PARQ --> DEEP["06: deeper_patterns.py\naccounts, coins, risk"]
+    DATA --> DEEP
+
+    PARQ --> ADV["08: advanced_stats.py\nera-split, lag, bootstrap, sentiment beta"]
+    DATA --> ADV
+    ADV --> DATA
+
+    PARQ --> BT["09: backtest.py\ncrowd-bias backtest"]
+
+    PARQ --> ML["10: predictive_model.py\nrandom forest / logistic regression"]
+    ML --> DATA
+
+    PARQ --> PLOTS["05 / 07 / 11: plots*.py"]
+    DATA --> PLOTS
+    PLOTS --> FIGS[("outputs/figures/*.png")]
+
+    DATA --> REPORT["REPORT.md"]
+    FIGS --> REPORT
+    BT --> REPORT
+```
+
+## Sample output
+
+| | |
+|---|---|
+| ![Win rate by sentiment](outputs/figures/win_rate_by_sentiment.png) | ![Capital efficiency by sentiment](outputs/figures/pnl_efficiency_by_sentiment.png) |
+| ![Was the crowd's bias correct](outputs/figures/crowd_bias_correctness.png) | ![Daily PnL vs sentiment over time](outputs/figures/daily_pnl_vs_sentiment_timeseries.png) |
+
+All 14 charts are in [`outputs/figures/`](outputs/figures/), referenced inline throughout [REPORT.md](REPORT.md).
 
 ## Project layout
 
