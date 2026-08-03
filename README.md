@@ -69,25 +69,26 @@ All 14 charts are in [`outputs/figures/`](outputs/figures/), referenced inline t
 ## Project layout
 
 ```
-fear_greed_index.csv        raw sentiment data (given)
-historical_data.csv         raw Hyperliquid trade data (given)
-notebooks/                  analysis scripts, run in order
-  01_explore.py              initial look at both raw files
-  02_explore_time.py          diagnose the timestamp columns
-  03_clean_merge.py           clean, align timezones, merge -> outputs/data/merged_trades.parquet
-  04_metrics.py                core performance metrics by sentiment regime
-  05_plots.py                   primary charts
-  06_deeper_patterns.py          per-account, per-coin, concentration & risk checks
-  07_plots_extra.py               remaining charts
-  08_advanced_stats.py             era split, lagged correlation, Kruskal-Wallis, bootstrap CIs, sentiment beta
-  09_backtest.py                    crowd-bias correctness check + simple sizing/skip backtests
-  10_predictive_model.py             random forest / logistic regression, feature importance for win prediction
-  11_plots_advanced.py                charts for 08-10
-outputs/
-  data/                      cached CSV/parquet outputs from the scripts above
-  figures/                   all PNG charts referenced in REPORT.md
-REPORT.md                   full findings + strategy recommendations
-requirements.txt            Python dependencies
+├── fear_greed_index.csv         raw sentiment data (given)
+├── historical_data.csv          raw Hyperliquid trade data (given)
+├── requirements.txt             Python dependencies
+├── REPORT.md                    full findings + strategy recommendations
+├── README.md                    this file
+├── notebooks/                   analysis scripts, run in order
+│   ├── 01_explore.py            initial look at both raw files
+│   ├── 02_explore_time.py       diagnose the timestamp columns
+│   ├── 03_clean_merge.py        clean, align timezones, merge -> outputs/data/merged_trades.parquet
+│   ├── 04_metrics.py            core performance metrics by sentiment regime
+│   ├── 05_plots.py              primary charts
+│   ├── 06_deeper_patterns.py    per-account, per-coin, concentration & risk checks
+│   ├── 07_plots_extra.py        remaining charts
+│   ├── 08_advanced_stats.py     era split, lagged correlation, Kruskal-Wallis, bootstrap CIs, sentiment beta
+│   ├── 09_backtest.py           crowd-bias correctness check + simple sizing/skip backtests
+│   ├── 10_predictive_model.py   random forest / logistic regression, feature importance for win prediction
+│   └── 11_plots_advanced.py     charts for 08-10
+└── outputs/
+    ├── data/                    cached CSV/parquet outputs from the scripts above
+    └── figures/                 all PNG charts referenced in REPORT.md
 ```
 
 ## Reproducing
